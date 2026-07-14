@@ -1,0 +1,315 @@
+/*==================================================
+PAGE STYLES
+==================================================*/
+
+body{
+
+    background:#0b0b0b;
+
+    color:#fff;
+
+}
+
+/*==================================================
+PAGE HERO
+==================================================*/
+
+.page-hero{
+
+    position:relative;
+
+    min-height:65vh;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    padding:220px 40px 120px;
+
+    overflow:hidden;
+
+}
+
+/* Animated Background Glow */
+
+.page-hero::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:700px;
+
+    height:700px;
+
+    border-radius:50%;
+
+    background:radial-gradient(circle,#8b5cf640 0%,transparent 70%);
+
+    filter:blur(80px);
+
+    animation:heroGlow 8s ease-in-out infinite alternate;
+
+}
+
+@keyframes heroGlow{
+
+    from{
+
+        transform:translateY(-40px) scale(.9);
+
+    }
+
+    to{
+
+        transform:translateY(40px) scale(1.15);
+
+    }
+
+}
+
+.page-hero>*{
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+.page-hero h1{
+
+    font-size:5.5rem;
+
+    line-height:1;
+
+    margin:25px 0;
+
+    color:#fff;
+
+}
+
+.page-hero p{
+
+    max-width:760px;
+
+    font-size:1.35rem;
+
+    line-height:1.9;
+
+    color:rgba(255,255,255,.75);
+
+}
+
+/*==================================================
+CONTENT
+==================================================*/
+
+.page-content{
+
+    position:relative;
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:0 40px 150px;
+
+}
+
+/*==================================================
+CARDS
+==================================================*/
+
+.content-box,
+
+.faq-item{
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:#181818;
+
+    border:1px solid rgba(255,255,255,.06);
+
+    border-radius:28px;
+
+    padding:45px;
+
+    margin-bottom:35px;
+
+    transition:.45s ease;
+
+}
+
+/* Purple Ambient Glow */
+
+.content-box::before,
+
+.faq-item::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-40px;
+
+    background:#8b5cf6;
+
+    filter:blur(90px);
+
+    opacity:0;
+
+    transition:.45s;
+
+    z-index:0;
+
+}
+
+.content-box>*,
+
+.faq-item>*{
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+.content-box:hover,
+
+.faq-item:hover{
+
+    transform:translateY(-10px);
+
+    border-color:#8b5cf6;
+
+    box-shadow:
+
+        0 35px 80px rgba(0,0,0,.35);
+
+}
+
+.content-box:hover::before,
+
+.faq-item:hover::before{
+
+    opacity:.12;
+
+}
+
+/*==================================================
+HEADINGS
+==================================================*/
+
+.content-box h2{
+
+    font-size:2rem;
+
+    margin-bottom:22px;
+
+    color:#fff;
+
+}
+
+.faq-item h3{
+
+    font-size:1.7rem;
+
+    margin-bottom:18px;
+
+    color:#fff;
+
+}
+
+/*==================================================
+TEXT
+==================================================*/
+
+.content-box p,
+
+.faq-item p{
+
+    font-size:1.15rem;
+
+    line-height:2;
+
+    color:rgba(255,255,255,.72);
+
+}
+
+/*==================================================
+CUSTOM SCROLLBAR
+==================================================*/
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#111;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#8b5cf6;
+
+    border-radius:50px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#a855f7;
+
+}
+
+/*==================================================
+RESPONSIVE
+==================================================*/
+
+@media(max-width:900px){
+
+    .page-hero{
+
+        padding:180px 25px 80px;
+
+    }
+
+    .page-hero h1{
+
+        font-size:3.8rem;
+
+    }
+
+    .page-hero p{
+
+        font-size:1.1rem;
+
+    }
+
+    .page-content{
+
+        padding:0 20px 100px;
+
+    }
+
+    .content-box,
+
+    .faq-item{
+
+        padding:30px;
+
+    }
+
+}
