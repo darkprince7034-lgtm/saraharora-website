@@ -100,7 +100,7 @@ const continuePayment = document.getElementById("continuePayment");
 const closeModal = document.getElementById("closeModal");
 
 const paymentPage =
-"https://superprofile.bio/vig/6a5fc72a0f3a3c0014fc0912";
+"https://cosmofeed.com/vig/6a65015d10e2fa00131cdcbc";
 
 if (subscribeBtn) {
 
