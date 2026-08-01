@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opening UPI App...</title>
+</head>
+<body>
+
+<h2>Opening your UPI app...</h2>
+<p>If nothing happens, tap the button below.</p>
+
+<button id="open">Open UPI App</button>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+
+const order = params.get("order");
+
+const upiId = "ajithajoshi9539o@oksbi";
+const name = "Sarah Exclusive";
+const amount = "299";
+
+const upiLink =
+    `upi://pay?pa=${encodeURIComponent(upiId)}`
+    + `&pn=${encodeURIComponent(name)}`
+    + `&am=${amount}`
+    + `&tn=${encodeURIComponent(order)}`;
+
+document.getElementById("open").onclick = () => {
+    window.location.href = upiLink;
+};
+
+window.location.href = upiLink;
+</script>
+
+</body>
+</html>
