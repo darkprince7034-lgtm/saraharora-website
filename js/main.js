@@ -99,8 +99,8 @@ const telegramModal = document.getElementById("telegramModal");
 const continuePayment = document.getElementById("continuePayment");
 const closeModal = document.getElementById("closeModal");
 
-const paymentPage =
-"https://cosmofeed.com/vig/6a65015d10e2fa00131cdcbc";
+const telegramBot =
+"https://t.me/sarah_paymentbot?start=subscribe";
 
 if (subscribeBtn) {
 
@@ -114,24 +114,36 @@ if (subscribeBtn) {
 
 }
 
-continuePayment.addEventListener("click", function(){
+if (continuePayment) {
 
-    window.location.href = paymentPage;
+    continuePayment.addEventListener("click", function(){
 
-});
+        window.open(telegramBot, "_blank");
 
-closeModal.addEventListener("click", function(){
+    });
 
-    telegramModal.classList.remove("show");
+}
 
-});
+if (closeModal) {
 
-telegramModal.addEventListener("click", function(e){
-
-    if(e.target === telegramModal){
+    closeModal.addEventListener("click", function(){
 
         telegramModal.classList.remove("show");
 
-    }
+    });
 
-});
+}
+
+if (telegramModal) {
+
+    telegramModal.addEventListener("click", function(e){
+
+        if(e.target === telegramModal){
+
+            telegramModal.classList.remove("show");
+
+        }
+
+    });
+
+}
