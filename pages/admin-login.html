@@ -295,16 +295,50 @@
             }
         }
 
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 34px 24px;
-                border-radius: 24px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
+        /* RESPONSIVE */
+        html { min-height: 100%; background: #09090d; }
+        body {
+            min-height: 100vh; min-height: 100dvh; width: 100%;
+            padding: max(18px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
+            overflow: auto;
         }
+        .login-wrapper { width: min(100%, 420px); }
+        .login-card { width: 100%; }
+        input, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        input { min-height: 48px; }
+        .login-button { min-height: 48px; }
+        .toggle-password { min-width: 44px; min-height: 44px; }
+
+        @media (max-width: 600px) {
+            body { align-items: center; justify-content: center; padding: 14px; }
+            .login-wrapper { width: 100%; max-width: 420px; }
+            .login-card { padding: 34px 24px; border-radius: 24px; }
+            .logo { width: 54px; height: 54px; margin-bottom: 18px; }
+            h1 { font-size: 24px; }
+            .subtitle { margin-bottom: 26px; font-size: 13px; }
+            .field { margin-bottom: 15px; }
+            label { font-size: 12px; }
+            input { min-height: 50px; padding: 14px; font-size: 16px; }
+            .login-button { min-height: 50px; font-size: 15px; }
+        }
+
+        @media (max-width: 380px) {
+            body { padding-left: 11px; padding-right: 11px; }
+            .login-card { padding: 28px 18px; border-radius: 22px; }
+            .logo { width: 50px; height: 50px; margin-bottom: 15px; font-size: 21px; }
+            h1 { font-size: 22px; }
+            .subtitle { margin-top: 7px; margin-bottom: 22px; }
+        }
+
+        @media (max-height: 620px) {
+            body { align-items: flex-start; padding-top: 12px; padding-bottom: 12px; }
+            .login-card { padding-top: 24px; padding-bottom: 24px; }
+            .logo { margin-bottom: 12px; }
+            .subtitle { margin-bottom: 18px; }
+            .field { margin-bottom: 11px; }
+            .login-button { margin-top: 3px; }
+        }
+
     </style>
 </head>
 
