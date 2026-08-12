@@ -23,6 +23,88 @@
 <link href="css/style.css" rel="stylesheet"/>
 <link href="css/animations.css" rel="stylesheet"/>
 <link href="css/responsive.css" rel="stylesheet"/>
+
+<style id="privacy-summary-style">
+#privacy-note .privacy-summary {
+    text-align: center;
+}
+#privacy-note .privacy-summary h2 {
+    margin: 18px 0 12px;
+}
+#privacy-note .privacy-summary p {
+    max-width: 760px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+#privacy-note .privacy-link {
+    display: inline-block;
+    margin-top: 22px;
+    text-decoration: none;
+}
+</style>
+
+
+<style id="privacy-layout-fix">
+#privacy-note {
+    height: auto !important;
+    min-height: 0 !important;
+    padding: clamp(70px, 9vw, 120px) 20px !important;
+    overflow: visible !important;
+    position: relative;
+}
+
+#privacy-note .privacy-summary {
+    width: min(900px, 100%) !important;
+    max-width: 900px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    text-align: center;
+}
+
+#privacy-note .privacy-summary h2 {
+    margin: 18px 0 18px !important;
+    white-space: normal !important;
+    overflow: visible !important;
+}
+
+#privacy-note .privacy-summary p {
+    width: min(760px, 100%) !important;
+    max-width: 760px !important;
+    margin: 0 auto !important;
+    line-height: 1.7 !important;
+    white-space: normal !important;
+    overflow: visible !important;
+}
+
+#privacy-note .privacy-link {
+    display: inline-block !important;
+    margin-top: 24px !important;
+    position: relative !important;
+    z-index: 2;
+    white-space: normal !important;
+    overflow: visible !important;
+}
+
+@media (max-width: 600px) {
+    #privacy-note {
+        padding: 60px 20px 70px !important;
+    }
+
+    #privacy-note .privacy-summary h2 {
+        font-size: clamp(34px, 10vw, 52px) !important;
+        line-height: 1.08 !important;
+    }
+
+    #privacy-note .privacy-summary p {
+        font-size: 16px !important;
+        line-height: 1.6 !important;
+    }
+}
+</style>
+
 </head>
 <body>
 <div id="scrollProgress"></div>
@@ -193,13 +275,14 @@
 </section>
 
 <section id="privacy-note" aria-label="Privacy">
-    <div class="intro-container">
-        <span class="intro-tag reveal">PRIVACY</span>
-        <p class="reveal delay-1">
-            No account, email address, phone number, payment card or other personal
-            details are required to browse this website or connect with Sarah.
+    <div class="intro-container privacy-summary">
+        <span class="intro-tag">PRIVACY</span>
+        <h2>Your privacy matters.</h2>
+        <p>
+            No account, email address, phone number, payment card, or other
+            personal details are required to browse this website or connect with Sarah.
         </p>
-        <a class="reveal delay-2" href="pages/privacy.html">Read our Privacy Policy</a>
+        <a href="pages/privacy.html" class="privacy-link">Read our Privacy Policy <span aria-hidden="true">→</span></a>
     </div>
 </section>
 
@@ -218,7 +301,7 @@
 <!-- Socials -->
 <div class="footer-column">
 <h3>Connect</h3>
-<a href="pages/privacy.html">Privacy Policy</a>
+
 <a href="https://www.instagram.com/sarah_dazzling/" rel="noopener noreferrer" target="_blank">
 <i class="fa-brands fa-instagram"></i>
                     Instagram
@@ -247,7 +330,8 @@
 </div>
 <div class="footer-bottom">
 
-            © 2026 Sarah Arora. All Rights Reserved.
+            © 2026 Sarah Arora. All Rights Reserved.<br/>
+            This website is owned and operated by Akhil Joshy (akhildisney@gmail.com).
 
         </div>
 </footer>
