@@ -687,6 +687,54 @@
                     14px 15px;
             }
         }
+
+        .payment-link-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 8px;
+
+            margin-top: 11px;
+
+            padding: 11px 15px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(255,255,255,0.16);
+
+            border:
+                1px solid rgba(255,255,255,0.18);
+
+            color: #fff;
+
+            text-decoration: none;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .payment-link-button:hover {
+            background:
+                rgba(255,255,255,0.24);
+
+            border-color:
+                rgba(255,255,255,0.30);
+
+            transform:
+                translateY(-1px);
+        }
+
+        .payment-link-button:active {
+            transform:
+                translateY(0);
+        }
     </style>
 </head>
 
@@ -907,8 +955,68 @@
         const text =
             document.createElement("div");
 
-        text.textContent =
-            message.message;
+        const paymentMarker =
+            "[[PAYMENT_LINK]]";
+
+        if (
+            message.message.includes(paymentMarker)
+        ) {
+
+            const parts =
+                message.message.split(
+                    paymentMarker
+                );
+
+            const textBefore =
+                parts[0].trim();
+
+            if (textBefore) {
+
+                const messageText =
+                    document.createElement("div");
+
+                messageText.textContent =
+                    textBefore;
+
+                text.appendChild(
+                    messageText
+                );
+            }
+
+
+            const paymentUrl =
+                parts[1].trim();
+
+
+            const linkButton =
+                document.createElement("a");
+
+            linkButton.href =
+                paymentUrl;
+
+            linkButton.target =
+                "_blank";
+
+            linkButton.rel =
+                "noopener noreferrer";
+
+            linkButton.className =
+                "payment-link-button";
+
+            linkButton.innerHTML = `
+                <span>🔗</span>
+                <span>Open Exclusive Page</span>
+            `;
+
+            text.appendChild(
+                linkButton
+            );
+
+        } else {
+
+            text.textContent =
+                message.message;
+        }
 
 
         const meta =
@@ -935,10 +1043,12 @@
 
             tick.className = "tick";
 
-            tick.textContent = "✓✓";
+            tick.textContent =
+                message.delivered
+                    ? "✓✓"
+                    : "✓";
 
             meta.appendChild(tick);
-
         }
 
 

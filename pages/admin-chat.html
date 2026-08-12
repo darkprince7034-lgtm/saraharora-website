@@ -1406,8 +1406,93 @@ function renderMessages(messages) {
         bubble.className =
             "bubble";
 
-        bubble.textContent =
-            message.message;
+        const paymentMarker =
+            "[[PAYMENT_LINK]]";
+
+        if (
+            message.message.includes(paymentMarker)
+        ) {
+
+            const parts =
+                message.message.split(
+                    paymentMarker
+                );
+
+            const textBefore =
+                parts[0].trim();
+
+            if (textBefore) {
+
+                const messageText =
+                    document.createElement("div");
+
+                messageText.textContent =
+                    textBefore;
+
+                bubble.appendChild(
+                    messageText
+                );
+            }
+
+
+            const paymentUrl =
+                parts[1].trim();
+
+
+            const linkButton =
+                document.createElement("a");
+
+            linkButton.href =
+                paymentUrl;
+
+            linkButton.target =
+                "_blank";
+
+            linkButton.rel =
+                "noopener noreferrer";
+
+            linkButton.textContent =
+                "🔗 Open Exclusive Page";
+
+            linkButton.style.display =
+                "inline-flex";
+
+            linkButton.style.marginTop =
+                "10px";
+
+            linkButton.style.padding =
+                "9px 13px";
+
+            linkButton.style.borderRadius =
+                "10px";
+
+            linkButton.style.background =
+                "rgba(255,255,255,0.16)";
+
+            linkButton.style.border =
+                "1px solid rgba(255,255,255,0.18)";
+
+            linkButton.style.color =
+                "#fff";
+
+            linkButton.style.textDecoration =
+                "none";
+
+            linkButton.style.fontSize =
+                "12px";
+
+            linkButton.style.fontWeight =
+                "600";
+
+            bubble.appendChild(
+                linkButton
+            );
+
+        } else {
+
+            bubble.textContent =
+                message.message;
+        }
 
 
         const time =
@@ -1595,7 +1680,7 @@ async function sendPaymentLink() {
                             selectedConversationId,
 
                         message:
-                            `Here you go 💜\n\n${PAYMENT_LINK}`
+                            `Here you go 💜\n\n[[PAYMENT_LINK]]${PAYMENT_LINK}`
                     })
                 }
             );

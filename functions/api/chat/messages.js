@@ -1,5 +1,6 @@
 function getVisitorToken(request) {
-    const cookieHeader = request.headers.get("Cookie") || "";
+    const cookieHeader =
+        request.headers.get("Cookie") || "";
 
     const match = cookieHeader.match(
         /(?:^|;\s*)sarah_chat_token=([^;]+)/
@@ -8,11 +9,17 @@ function getVisitorToken(request) {
     return match ? match[1] : null;
 }
 
+
+/* =========================================================
+   POST — SEND VISITOR MESSAGE
+========================================================= */
+
 export async function onRequestPost(context) {
     const { request, env } = context;
 
     try {
-        const visitorToken = getVisitorToken(request);
+        const visitorToken =
+            getVisitorToken(request);
 
         if (!visitorToken) {
             return Response.json(
@@ -24,7 +31,8 @@ export async function onRequestPost(context) {
             );
         }
 
-        const body = await request.json();
+        const body =
+            await request.json();
 
         const conversationId =
             body.conversationId?.trim();
@@ -32,11 +40,15 @@ export async function onRequestPost(context) {
         const message =
             body.message?.trim();
 
-        if (!conversationId || !message) {
+        if (
+            !conversationId ||
+            !message
+        ) {
             return Response.json(
                 {
                     success: false,
-                    error: "Conversation ID and message are required."
+                    error:
+                        "Conversation ID and message are required."
                 },
                 { status: 400 }
             );
@@ -46,55 +58,82 @@ export async function onRequestPost(context) {
             return Response.json(
                 {
                     success: false,
-                    error: "Message is too long."
+                    error:
+                        "Message is too long."
                 },
                 { status: 400 }
             );
         }
 
-        const conversation = await env.DB
-            .prepare(`
-                SELECT id
-                FROM conversations
-                WHERE id = ?
-                  AND visitor_token = ?
-                LIMIT 1
-            `)
-            .bind(
-                conversationId,
-                visitorToken
-            )
-            .first();
+
+        /* -----------------------------------------
+           Verify conversation belongs to visitor
+        ----------------------------------------- */
+
+        const conversation =
+            await env.DB
+                .prepare(`
+                    SELECT id
+                    FROM conversations
+                    WHERE id = ?
+                      AND visitor_token = ?
+                    LIMIT 1
+                `)
+                .bind(
+                    conversationId,
+                    visitorToken
+                )
+                .first();
+
 
         if (!conversation) {
             return Response.json(
                 {
                     success: false,
-                    error: "Conversation not found."
+                    error:
+                        "Conversation not found."
                 },
                 { status: 404 }
             );
         }
 
-        const now = new Date().toISOString();
 
-        const result = await env.DB
-            .prepare(`
-                INSERT INTO messages (
-                    conversation_id,
-                    sender,
+        /* -----------------------------------------
+           Insert visitor message
+        ----------------------------------------- */
+
+        const now =
+            new Date().toISOString();
+
+        const result =
+            await env.DB
+                .prepare(`
+                    INSERT INTO messages (
+                        conversation_id,
+                        sender,
+                        message,
+                        created_at,
+                        delivered
+                    )
+                    VALUES (
+                        ?,
+                        'visitor',
+                        ?,
+                        ?,
+                        1
+                    )
+                `)
+                .bind(
+                    conversationId,
                     message,
-                    created_at,
-                    delivered
+                    now
                 )
-                VALUES (?, 'visitor', ?, ?, 1)
-            `)
-            .bind(
-                conversationId,
-                message,
-                now
-            )
-            .run();
+                .run();
+
+
+        /* -----------------------------------------
+           Mark conversation as pending
+        ----------------------------------------- */
 
         await env.DB
             .prepare(`
@@ -110,11 +149,14 @@ export async function onRequestPost(context) {
             )
             .run();
 
+
         return Response.json({
             success: true,
-            messageId: result.meta.last_row_id,
+            messageId:
+                result.meta.last_row_id,
             createdAt: now
         });
+
 
     } catch (error) {
 
@@ -126,92 +168,157 @@ export async function onRequestPost(context) {
         return Response.json(
             {
                 success: false,
-                error: "Unable to send message."
+                error:
+                    "Unable to send message."
             },
             { status: 500 }
         );
     }
 }
 
+
+/* =========================================================
+   GET — LOAD VISITOR CONVERSATION
+========================================================= */
+
 export async function onRequestGet(context) {
     const { request, env } = context;
 
     try {
-        const visitorToken = getVisitorToken(request);
+
+        /* -----------------------------------------
+           Get visitor token
+        ----------------------------------------- */
+
+        const visitorToken =
+            getVisitorToken(request);
+
 
         if (!visitorToken) {
             return Response.json(
                 {
                     success: false,
-                    error: "Chat session not found."
+                    error:
+                        "Chat session not found."
                 },
                 { status: 401 }
             );
         }
 
-        const url = new URL(request.url);
+
+        /* -----------------------------------------
+           Get conversation ID
+        ----------------------------------------- */
+
+        const url =
+            new URL(request.url);
 
         const conversationId =
-            url.searchParams.get("conversationId");
+            url.searchParams.get(
+                "conversationId"
+            );
+
 
         if (!conversationId) {
             return Response.json(
                 {
                     success: false,
-                    error: "Conversation ID is required."
+                    error:
+                        "Conversation ID is required."
                 },
                 { status: 400 }
             );
         }
 
-        const conversation = await env.DB
-            .prepare(`
-                SELECT
-                    id,
-                    status,
-                    created_at,
-                    updated_at
-                FROM conversations
-                WHERE id = ?
-                  AND visitor_token = ?
-                LIMIT 1
-            `)
-            .bind(
-                conversationId,
-                visitorToken
-            )
-            .first();
+
+        /* -----------------------------------------
+           Verify visitor owns conversation
+        ----------------------------------------- */
+
+        const conversation =
+            await env.DB
+                .prepare(`
+                    SELECT
+                        id,
+                        status,
+                        created_at,
+                        updated_at
+                    FROM conversations
+                    WHERE id = ?
+                      AND visitor_token = ?
+                    LIMIT 1
+                `)
+                .bind(
+                    conversationId,
+                    visitorToken
+                )
+                .first();
+
 
         if (!conversation) {
             return Response.json(
                 {
                     success: false,
-                    error: "Conversation not found."
+                    error:
+                        "Conversation not found."
                 },
                 { status: 404 }
             );
         }
 
-        const { results: messages } = await env.DB
+
+        /* -----------------------------------------
+           Mark Sarah's messages as delivered
+        ----------------------------------------- */
+
+        await env.DB
             .prepare(`
-                SELECT
-                    id,
-                    sender,
-                    message,
-                    created_at,
-                    delivered
-                FROM messages
+                UPDATE messages
+                SET delivered = 1
                 WHERE conversation_id = ?
-                ORDER BY id ASC
+                  AND sender = 'admin'
+                  AND delivered = 0
             `)
-            .bind(conversationId)
-            .all();
+            .bind(
+                conversationId
+            )
+            .run();
+
+
+        /* -----------------------------------------
+           Retrieve messages AFTER updating
+           delivery status
+        ----------------------------------------- */
+
+        const { results: messages } =
+            await env.DB
+                .prepare(`
+                    SELECT
+                        id,
+                        sender,
+                        message,
+                        created_at,
+                        delivered
+                    FROM messages
+                    WHERE conversation_id = ?
+                    ORDER BY id ASC
+                `)
+                .bind(
+                    conversationId
+                )
+                .all();
+
+
+        /* -----------------------------------------
+           Return conversation
+        ----------------------------------------- */
 
         return Response.json({
             success: true,
             conversation,
             messages
         });
+
 
     } catch (error) {
 
@@ -223,7 +330,8 @@ export async function onRequestGet(context) {
         return Response.json(
             {
                 success: false,
-                error: "Unable to load conversation."
+                error:
+                    "Unable to load conversation."
             },
             { status: 500 }
         );
